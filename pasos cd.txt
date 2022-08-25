@@ -1,0 +1,22 @@
+Definamos los roles
+Deportistas - Usuarios
+Computadora del establecimiento - host
+
+REQUERIMIENTOS FÍSICOS
+CÁMARA WEB MODELO:       O SUPERIOR OPCIONALMENTE CON UN TRIPIE
+COMPUTADORA LAPTOP O DE ESCRITORIO CON PROCESADOR MÍNIMO DE PENTIUM (A)
+UN TECLADO QUE PUEDA CONECTARSE CON LA COMPUTADORA
+INTERNET
+
+
+PARTE 1
+Para hacer uso del sistema, el usuario tiene que ir al host y registrarse por primera vez
+el host siempre mostrará lo que su cámara esta viendo de manera que para el usuario es mas facil acomodar su QR y proceder a la fase de logeo (PARTE 2). De igual manera tendra siempre una opcion para que los usuarios se registren en la cual, les pedirá su nombre, y el sistema generará un ID el cual los usuarios tienen que leer con su telefono y posteriormente ese ID y su nombre quedarán guardados mientras la aplicacion o los datos no sean borrados, los cuales les serviran para iniciar sesión.
+
+En caso de que el usuario elimine o pierda datos para generar sus QR, el sistema guarda una copia del QR con el cual se registraron por primera vez y tienen la opcion de volverse a logear en su celular.
+
+
+
+BUSCAR COMO UTILIZAR CÁMARA, LEER CÓDIGOS QR Y GUARDAR EN MEMORIA ESTÁTICA INFORMACIÓN - POR PARTE DE DEPORTISTA
+
+BUSCAR GENERADOR QR CON JS, BUSCAR BD OPTIMA, LECTOR DE QR, PARSEAR STRING A JSON, EXTRAER DE JSON A BD
