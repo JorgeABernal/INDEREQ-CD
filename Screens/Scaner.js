@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Text, View, StyleSheet, Button, Linking, Dimensions, useWindowDimensions } from "react-native";
+import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -33,12 +33,25 @@ const Scanner = ({route}) =>{
 
     return(
         <View style={styles.container}>
-            <Text>Escanea el código para iniciar sesión</Text>
+            <View style={styles.cuadrante1}>
+                <Image
+                    style={styles.logoTexto}
+                    source={require('../images/indereq-logo-texto.png')}
+                />
+            </View>
+            <View style={styles.cuadrante2}>
+                <Text style={styles.texto1}>Bienvenido</Text>
+                <Text style={styles.texto2}>Por favor,</Text>
+                <Text style={styles.texto2}>escanéa el QR</Text>
+            </View>
             <Camera
                 onBarCodeScanned={scanned ? undefined:handleBarCodeScanned}
-                style = {{height:Math.round((Dimensions.get('window').width * 4)/3), width:Dimensions.get('window').width}}
-                ratio={'4:3'}
+                style = {{height:Math.round((Dimensions.get('window').width)), width:Dimensions.get('window').width}}
+                ratio={'1:1'}
             />
+            <View style={styles.cuadrante3}>
+                <Text style={styles.texto3}>{'Centro de Desarrollo \n Facultad de Informática UAQ \n Todos los derechos reservados 2022 (C)'}</Text>
+            </View>
         </View>
     )
 }
@@ -48,7 +61,44 @@ export default Scanner;
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        justifyContent: 'center',
+        backgroundColor: '#266FB6',
         alignItems: 'center',
+        // justifyContent: 'center',
+    },
+    logoTexto:{
+        width: Dimensions.get('window').width,
+        resizeMode: 'contain'
+    },
+    cuadrante1:{
+        justifyContent: 'center',
+        height: Dimensions.get('window').height*0.20
+    },
+    cuadrante2:{
+        // justifyContent: 'center',
+        // backgroundColor: 'red',
+        height: Dimensions.get('window').height*0.20
+    },
+    cuadrante3:{
+        height: 'auto',
+    },
+    texto1:{
+        fontSize: Dimensions.get('window').width*0.04,
+        textAlign: 'center',
+        color: 'white',
+        marginTop: Dimensions.get('window').width*0.025,
+        marginBottom: Dimensions.get('window').width*0.025,
+
+    },
+    texto2:{
+        fontSize: Dimensions.get('window').width*0.065,
+        textAlign: 'center',
+        color: 'white',
+        // marginTop: Dimensions.get('window').width
+    },
+    texto3:{
+        fontSize: Dimensions.get('window').width*0.025,
+        textAlign: 'center',
+        color: '#DDD',
+        marginTop: Dimensions.get('window').width*0.05
     }
 })
