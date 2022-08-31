@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useState } from 'react';
@@ -18,10 +19,10 @@ const Scanner = ({route}) =>{
         })();
     }, []);
 
-    const handleBarCodeScanned = ({ type, data }) =>{
+    const handleBarCodeScanned = async ({ type, data }) =>{
         setScanned(true);
-        //alert(`Scanned ${type} and ${data}`);
-        navigation.navigate('Home',{datos:data});
+        await AsyncStorage.setItem("data", data);
+        navigation.navigate('Home');
     };
     
     if (hasPermission === null){

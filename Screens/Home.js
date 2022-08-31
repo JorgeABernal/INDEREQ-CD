@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,46 +8,45 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 let logoINDEREQ = require('../images/logo.png');
 const actividades = ["Entrada/Salida", "Futbol", "Voleibol", "Atletismo"];
 
-const subirClave = async (id) => {
-  await AsyncStorage.setItem("id", id);
-}
-
-const bajarClave = async () => await AsyncStorage.getItem("id");
-
 const Home = ({route}) =>{
   const [dataGlobal, setdataGlobal] = useState();
   const [valor, setValor] = useState(0);
   let valorAct = 0;
-
-  useEffect(() => {
-    let escaneo = route.params.datos;
-    subirClave(escaneo);
-    GenerarQR();
-  }, []);
-
-  const getClave = async () => await bajarClave();
   
-  const GenerarQR = async () =>{
+  const getTime = () => {
     let fecha = new Date().toDateString().split(" ");
-      
-    let id = await getClave();
     let hora = new Date().getHours();
     let min = new Date().getMinutes();
     let sec = new Date().getSeconds();
+    return [fecha, hora, min, sec];    
+  };
+  
+  const formatData = data => {
+    let { idPropio } = JSON.parse(data);
+  
+    let [fecha, hora, min, sec] = getTime();
+    return {
+      id: idPropio,
+      anio: fecha[3], 
+      mes: fecha[1], 
+      diaNum: fecha[2], 
+      dia: fecha[0], 
+      hora: hora, 
+      min: min, 
+      sec: sec,
+      act: valorAct,
+    };
+  };
 
-    let data = `{
-      "id": ${id}, 
-      "anio": ${fecha[3]}, 
-      "mes": ${fecha[1]}, 
-      "diaNum": ${fecha[2]}, 
-      "dia": ${fecha[0]}, 
-      hora": ${hora}, 
-      "min": ${min}, 
-      "sec": ${sec},
-      "act": ${valorAct},
-    }`;
-    setdataGlobal(data);
-  }
+  useEffect(async () => {
+    setdataGlobal(formatData(await bajarClave()));
+  }, []);
+  
+  const bajarClave = async () => await AsyncStorage.getItem("data");
+
+  /*const GenerarQR = (data) =>{
+    formatData(data);
+  }*/
   return (
     <View style={styles.container}>
       <View style={styles.cuadrante1}>
@@ -59,7 +57,7 @@ const Home = ({route}) =>{
       </View>
       <View style={styles.cuadrante2}>
         <Text style={styles.texto1}>Bienvenido nuevamente</Text>
-        <Text style={styles.texto2}>{route.params.datos}</Text>
+        <Text style={styles.texto2}>NombreProvisional</Text>
         <Text style={styles.texto4}>¿Qué actividad estás realizando?</Text>
       </View>
       {/* <Text>Info: {route.params.datos}</Text> */}
@@ -67,8 +65,27 @@ const Home = ({route}) =>{
         <SelectDropdown 
           	data={actividades}
             onSelect={(selectedItem, index) => {  //Egypt 0, Canada 1
-              valorAct = index;
-              GenerarQR();
+              let [fecha, hora, min, sec] = getTime();
+              console.log("dataGlobal",  {
+                ...dataGlobal,
+                anio: fecha[3], 
+                mes: fecha[1], 
+                diaNum: fecha[2], 
+                dia: fecha[0],
+                hora: hora, 
+                min: min, 
+                sec: sec,          
+                act: index
+              });
+
+              setdataGlobal({
+                ...dataGlobal,
+                anio: fecha[3], 
+                mes: fecha[1], 
+                diaNum: fecha[2], 
+                dia: fecha[0],           
+                act: index
+              });
             }}
             defaultButtonText={'Selecciona una actividad'}
             buttonTextAfterSelection={(selectedItem, index) => {
@@ -91,7 +108,7 @@ const Home = ({route}) =>{
       <View style={styles.cuadrante3}>
       </View>
       <View style={styles.QR}>
-        <QRCode value={dataGlobal} size={Dimensions.get('window').width*0.75} logo={logoINDEREQ}/>      
+        <QRCode value={JSON.stringify(dataGlobal)} size={Dimensions.get('window').width*0.75} logo={logoINDEREQ}/>      
       </View>
       {/* <Button onPress={GenerarQR} title="Generar QR"/> */}
       <Text style={styles.texto3}>{'Centro de Desarrollo \n Facultad de Informática UAQ \n Todos los derechos reservados 2022 (C)'}</Text>
