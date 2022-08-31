@@ -67,15 +67,16 @@ const styles = StyleSheet.create({
     },
     logoTexto:{
         width: Dimensions.get('window').width,
-        resizeMode: 'contain'
+        resizeMode: 'contain',
+        marginTop:Dimensions.get('window').height*.05
     },
     cuadrante1:{
         justifyContent: 'center',
-        height: Dimensions.get('window').height*0.20
+        height: Dimensions.get('window').height*0.20,
     },
     cuadrante2:{
         // justifyContent: 'center',
-        // backgroundColor: 'red',
+        //backgroundColor: 'red',
         height: Dimensions.get('window').height*0.20
     },
     cuadrante3:{
@@ -85,20 +86,24 @@ const styles = StyleSheet.create({
         fontSize: Dimensions.get('window').width*0.04,
         textAlign: 'center',
         color: 'white',
-        marginTop: Dimensions.get('window').width*0.025,
+        marginTop: Dimensions.get('window').width*0.055,
         marginBottom: Dimensions.get('window').width*0.025,
-
+        fontFamily:'Fredoka-Regular',
+        fontSize:20,
     },
     texto2:{
         fontSize: Dimensions.get('window').width*0.065,
         textAlign: 'center',
         color: 'white',
-        // marginTop: Dimensions.get('window').width
+        fontFamily:'Fredoka-Regular',
+        fontSize:30,
     },
     texto3:{
         fontSize: Dimensions.get('window').width*0.025,
         textAlign: 'center',
         color: '#DDD',
-        marginTop: Dimensions.get('window').width*0.05
+        marginTop: Dimensions.get('window').width*0.05,
+        marginTop: Dimensions.get('window').width*0.15,
+        fontFamily:'Fredoka-Light',
     }
 })
