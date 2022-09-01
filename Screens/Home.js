@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
@@ -8,45 +8,48 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 let logoINDEREQ = require('../images/logo.png');
 const actividades = ["Entrada/Salida", "Futbol", "Voleibol", "Atletismo"];
 
-const Home = ({route}) =>{
-  const [dataGlobal, setdataGlobal] = useState();
-  const [valor, setValor] = useState(0);
-  let valorAct = 0;
-  
-  const getTime = () => {
-    let fecha = new Date().toDateString().split(" ");
-    let hora = new Date().getHours();
-    let min = new Date().getMinutes();
-    let sec = new Date().getSeconds();
-    return [fecha, hora, min, sec];    
-  };
+const oInitState = {
+  id: '',
+  act: '',
+  fecha: '',
+};
+
+const Home = () =>{
+  const [globalData, setGlobalData] = useState(oInitState);
   
   const formatData = data => {
     let { idPropio } = JSON.parse(data);
   
-    let [fecha, hora, min, sec] = getTime();
     return {
+      ...globalData,
       id: idPropio,
-      anio: fecha[3], 
-      mes: fecha[1], 
-      diaNum: fecha[2], 
-      dia: fecha[0], 
-      hora: hora, 
-      min: min, 
-      sec: sec,
-      act: valorAct,
+      fecha: new Date()
     };
   };
 
-  useEffect(async () => {
-    setdataGlobal(formatData(await bajarClave()));
+  useEffect(() => {
+    (async () => {
+      setGlobalData(formatData(await getClave()));
+    })();
   }, []);
   
-  const bajarClave = async () => await AsyncStorage.getItem("data");
+  const getClave = async () => await AsyncStorage.getItem("data");
 
-  /*const GenerarQR = (data) =>{
-    formatData(data);
-  }*/
+  const handleQR = selectedItem => {
+    setGlobalData({
+      ...globalData,
+      act: selectedItem,
+      fecha: new Date()
+    });
+  };
+
+  // * To visualize
+  // useEffect(() => {
+  //   if (globalData.fecha !== '') {
+  //     console.log("->", globalData, "\nFecha", globalData.fecha.toString());
+  //   }
+  // }, [globalData]);
+
   return (
     <View style={styles.container}>
       <View style={styles.cuadrante1}>
@@ -60,38 +63,15 @@ const Home = ({route}) =>{
         <Text style={styles.texto2}>NombreProvisional</Text>
         <Text style={styles.texto4}>¿Qué actividad estás realizando?</Text>
       </View>
-      {/* <Text>Info: {route.params.datos}</Text> */}
       <View style={styles.select}>
         <SelectDropdown 
-          	data={actividades}
-            onSelect={(selectedItem, index) => {  //Egypt 0, Canada 1
-              let [fecha, hora, min, sec] = getTime();
-              console.log("dataGlobal",  {
-                ...dataGlobal,
-                anio: fecha[3], 
-                mes: fecha[1], 
-                diaNum: fecha[2], 
-                dia: fecha[0],
-                hora: hora, 
-                min: min, 
-                sec: sec,          
-                act: index
-              });
-
-              setdataGlobal({
-                ...dataGlobal,
-                anio: fecha[3], 
-                mes: fecha[1], 
-                diaNum: fecha[2], 
-                dia: fecha[0],           
-                act: index
-              });
-            }}
+            data={actividades}
+            onSelect={handleQR}
             defaultButtonText={'Selecciona una actividad'}
-            buttonTextAfterSelection={(selectedItem, index) => {
+            buttonTextAfterSelection={(selectedItem) => {
               return selectedItem;
             }}
-            rowTextForSelection={(item, index) => {
+            rowTextForSelection={(item) => {
               return item;
             }}
             buttonStyle={styles.dropdown1BtnStyle}
@@ -108,9 +88,8 @@ const Home = ({route}) =>{
       <View style={styles.cuadrante3}>
       </View>
       <View style={styles.QR}>
-        <QRCode value={JSON.stringify(dataGlobal)} size={Dimensions.get('window').width*0.75} logo={logoINDEREQ}/>      
+        <QRCode value={JSON.stringify(globalData)} size={Dimensions.get('window').width*0.75} logo={logoINDEREQ}/>      
       </View>
-      {/* <Button onPress={GenerarQR} title="Generar QR"/> */}
       <Text style={styles.texto3}>{'Centro de Desarrollo \n Facultad de Informática UAQ \n Todos los derechos reservados 2022 (C)'}</Text>
     </View>
   );
@@ -164,6 +143,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Fredoka-Regular',
     fontSize:25
   },
+  texto3:{
+      fontSize: Dimensions.get('window').width*0.025,
+      textAlign: 'center',
+      color: '#DDD',
+      marginTop: Dimensions.get('window').width*0.2
+  },
   texto4:{
     fontSize: Dimensions.get('window').width*0.03,
     textAlign: 'center',
@@ -174,12 +159,6 @@ const styles = StyleSheet.create({
   },
   QR:{
     marginTop: Dimensions.get('window').width*-0.875
-  },
-  texto3:{
-      fontSize: Dimensions.get('window').width*0.025,
-      textAlign: 'center',
-      color: '#DDD',
-      marginTop: Dimensions.get('window').width*0.2
   },
   dropdown1BtnStyle: {
     width: '80%',
