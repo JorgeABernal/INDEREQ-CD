@@ -4,25 +4,30 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import TouchableCmp from '../assetsUI/TouchableCmp';
 
 let logoINDEREQ = require('../images/logo.png');
 const actividades = ["Entrada/Salida", "Futbol", "Voleibol", "Atletismo"];
 
 const oInitState = {
   id: '',
-  act: '',
+  nombreC: '',
+  act: 'Entrada/Salida',
   fecha: '',
 };
 
 const Home = () =>{
   const [globalData, setGlobalData] = useState(oInitState);
+  const [actData, setActAdata] = useState("Entrada/Salida");
   
   const formatData = data => {
-    let { idPropio } = JSON.parse(data);
+    let { idPropio, nombre, apellidoP, apellidoM } = JSON.parse(data);
+    let nombreCompleto = `${nombre} ${apellidoP} ${apellidoM}`;
   
     return {
       ...globalData,
       id: idPropio,
+      nombreC: nombreCompleto, 
       fecha: new Date()
     };
   };
@@ -36,19 +41,20 @@ const Home = () =>{
   const getClave = async () => await AsyncStorage.getItem("data");
 
   const handleQR = selectedItem => {
+    setActAdata(selectedItem);
     setGlobalData({
       ...globalData,
-      act: selectedItem,
+      act: selectedItem ? selectedItem : actData,
       fecha: new Date()
     });
   };
 
-  // * To visualize
-  // useEffect(() => {
-  //   if (globalData.fecha !== '') {
-  //     console.log("->", globalData, "\nFecha", globalData.fecha.toString());
-  //   }
-  // }, [globalData]);
+  //* To visualize
+  useEffect(() => {
+    if (globalData.fecha !== '') {
+      console.log("->", globalData, "\nFecha", globalData.fecha.toString());
+    }
+  }, [globalData]);
 
   return (
     <View style={styles.container}>
@@ -60,7 +66,7 @@ const Home = () =>{
       </View>
       <View style={styles.cuadrante2}>
         <Text style={styles.texto1}>Bienvenido nuevamente</Text>
-        <Text style={styles.texto2}>NombreProvisional</Text>
+        <Text style={styles.texto2}>{globalData.nombreC}</Text>
         <Text style={styles.texto4}>¿Qué actividad estás realizando?</Text>
       </View>
       <View style={styles.select}>
@@ -85,10 +91,12 @@ const Home = () =>{
             rowTextStyle={styles.dropdown1RowTxtStyle}
           />
       </View>
-      <View style={styles.cuadrante3}>
-      </View>
-      <View style={styles.QR}>
-        <QRCode value={JSON.stringify(globalData)} size={Dimensions.get('window').width*0.75} logo={logoINDEREQ}/>      
+      <View style={{overflow: 'hidden', borderRadius: 200, transform: [{scaleX: 1.6}]}}>
+        <TouchableCmp onPress={handleQR}>
+          <View style={styles.cuadrante3}>
+            <QRCode value={JSON.stringify(globalData)} size={Dimensions.get('window').width*0.5} logo={logoINDEREQ}/>
+          </View>
+        </TouchableCmp>
       </View>
       <Text style={styles.texto3}>{'Centro de Desarrollo \n Facultad de Informática UAQ \n Todos los derechos reservados 2022 (C)'}</Text>
     </View>
@@ -121,8 +129,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').width,
     backgroundColor: 'white',
-    borderRadius: 300,
-    transform: [{scaleX: 1.6}]
+    transform: [{scaleY: 1.6}]
   },
   texto1:{
     fontSize: Dimensions.get('window').width*0.03,
@@ -147,7 +154,7 @@ const styles = StyleSheet.create({
       fontSize: Dimensions.get('window').width*0.025,
       textAlign: 'center',
       color: '#DDD',
-      marginTop: Dimensions.get('window').width*0.2
+      marginTop: Dimensions.get('window').width*0.02
   },
   texto4:{
     fontSize: Dimensions.get('window').width*0.03,
