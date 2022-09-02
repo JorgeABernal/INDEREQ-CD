@@ -11,7 +11,14 @@ const Scanner = () =>{
   const navigation = useNavigation();
 
   useEffect(()=>{
-    (async ()=> {
+    (async () => {
+      const clave = await AsyncStorage.getItem("data");
+      // ? If you want to try the Scanner, comment this if
+      if (clave) {
+        navigation.navigate('Home');
+      }
+    })();
+    (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();

@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Image, Dimensions, BackHandler } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TouchableCmp from '../assetsUI/TouchableCmp';
 import { usePreventScreenCapture } from 'expo-screen-capture';
+import { useNavigation } from '@react-navigation/native';
 
 let logoINDEREQ = require('../images/logo.png');
 const actividades = ["Entrada/Salida", "Futbol", "Voleibol", "Atletismo"];
@@ -20,6 +21,7 @@ const oInitState = {
 const Home = () =>{
   const [globalData, setGlobalData] = useState(oInitState);
   const [actData, setActAdata] = useState("Entrada/Salida");
+  const navigation = useNavigation();
 
   usePreventScreenCapture();
   
@@ -34,6 +36,13 @@ const Home = () =>{
       fecha: new Date()
     };
   };
+
+  // * Prevent go back to scan screen
+  useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault();
+    })
+  }, [navigation]);
 
   useEffect(() => {
     (async () => {
