@@ -41,7 +41,7 @@ const Home = () =>{
   const getClave = async () => await AsyncStorage.getItem("data");
 
   const handleQR = selectedItem => {
-    setActAdata(selectedItem);
+
     setGlobalData({
       ...globalData,
       act: selectedItem ? selectedItem : actData,
@@ -71,9 +71,10 @@ const Home = () =>{
       </View>
       <View style={styles.select}>
         <SelectDropdown 
+            searchPlaceHolder='Selecciona una actividad'
             data={actividades}
             onSelect={handleQR}
-            defaultButtonText={'Selecciona una actividad'}
+            defaultButtonText={actData}
             buttonTextAfterSelection={(selectedItem) => {
               return selectedItem;
             }}
@@ -142,7 +143,6 @@ const styles = StyleSheet.create({
   texto2:{
     fontSize: Dimensions.get('window').width*0.05,
     width: Dimensions.get('window').width*0.9,
-    // height: Dimensions.get('window').width*0.15,
     marginTop: Dimensions.get('window').width*0.01,
     marginBottom: Dimensions.get('window').width*0.01,
     textAlign: 'center',
@@ -151,10 +151,10 @@ const styles = StyleSheet.create({
     fontSize:25
   },
   texto3:{
-      fontSize: Dimensions.get('window').width*0.025,
-      textAlign: 'center',
-      color: '#DDD',
-      marginTop: Dimensions.get('window').width*0.02
+    fontSize: Dimensions.get('window').width*0.025,
+    textAlign: 'center',
+    color: '#DDD',
+    marginTop: Dimensions.get('window').width*0.02
   },
   texto4:{
     fontSize: Dimensions.get('window').width*0.03,
@@ -177,8 +177,15 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get('window').height*-.03,
     marginBottom: Dimensions.get('window').height*.03,
   },
-  dropdown1BtnTxtStyle: {color: '#444', textAlign: 'left',fontFamily:'Fredoka-Light',},
-  dropdown1DropdownStyle: {backgroundColor: '#EFEFEF', marginTop:Dimensions.get('window').height*-.043},
+  dropdown1BtnTxtStyle: {
+    color: '#444',
+    textAlign: 'left',
+    fontFamily:'Fredoka-Light',
+  },
+  dropdown1DropdownStyle: {
+    backgroundColor: '#EFEFEF',
+    marginTop:Dimensions.get('window').height*-.043
+  },
   dropdown1RowStyle: {backgroundColor: '#EFEFEF', borderBottomColor: '#C5C5C5'},
   dropdown1RowTxtStyle: {color: '#444', textAlign: 'left',fontFamily:'Fredoka-Light',},
   select:{
