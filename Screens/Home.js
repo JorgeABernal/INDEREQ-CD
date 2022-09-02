@@ -5,6 +5,7 @@ import QRCode from 'react-native-qrcode-svg';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TouchableCmp from '../assetsUI/TouchableCmp';
+import { usePreventScreenCapture } from 'expo-screen-capture';
 
 let logoINDEREQ = require('../images/logo.png');
 const actividades = ["Entrada/Salida", "Futbol", "Voleibol", "Atletismo"];
@@ -19,6 +20,8 @@ const oInitState = {
 const Home = () =>{
   const [globalData, setGlobalData] = useState(oInitState);
   const [actData, setActAdata] = useState("Entrada/Salida");
+
+  usePreventScreenCapture();
   
   const formatData = data => {
     let { idPropio, nombre, apellidoP, apellidoM } = JSON.parse(data);
