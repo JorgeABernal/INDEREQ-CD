@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
+import { Alert, Text, View, StyleSheet, Dimensions, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from '@react-navigation/native';
 import { Camera } from 'expo-camera';
@@ -17,10 +17,39 @@ const Scanner = () =>{
     })();
   }, []);
 
-  const handleBarCodeScanned = async ({ _, data }) =>{
-    setScanned(true);
-    await AsyncStorage.setItem("data", data);
-    navigation.navigate('Home');
+  const handleBarCodeScanned = async ({ _, data }) => {
+    const msgError = () => Alert.alert("Error", "El código QR no es válido", [{ text: "OK" }]);
+
+    let correctData = true,
+      dataKeys;
+
+    try {
+      dataKeys = Object.keys(JSON.parse(data));
+    } catch(error) {
+      msgError();
+    }
+
+    if (dataKeys.length === 4) {
+      dataKeys.forEach(key => {
+        if (!["idPropio", "nombre", "apellidoP", "apellidoM"].includes(key)) {
+          correctData = false;
+        }
+      });
+    } else {
+      correctData = false;  
+    }
+
+    if (correctData) {
+      setScanned(true);
+      await AsyncStorage.setItem("data", data);
+      navigation.navigate('Home');
+    } else {
+      msgError();
+      setScanned(true);
+      setTimeout(() => {
+        setScanned(false);
+      }, 3000)
+    }
   };
   
   if (hasPermission === null){
@@ -44,7 +73,7 @@ const Scanner = () =>{
         <Text style={styles.texto2}>escanéa el QR</Text>
       </View>
       <Camera
-        onBarCodeScanned={scanned ? undefined:handleBarCodeScanned}
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style = {{height:Math.round((Dimensions.get('window').width)), width:Dimensions.get('window').width}}
         ratio={'1:1'}
       />
