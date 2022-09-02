@@ -41,6 +41,9 @@ const Home = () =>{
   const getClave = async () => await AsyncStorage.getItem("data");
 
   const handleQR = selectedItem => {
+    if (selectedItem) {
+      setActAdata(selectedItem);
+    }
 
     setGlobalData({
       ...globalData,
