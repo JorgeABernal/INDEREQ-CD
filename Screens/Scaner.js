@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert, Text, View, StyleSheet, Dimensions, Image } from "react-native";
+import { Alert, ActivityIndicator, Text, View, StyleSheet, Dimensions, Image } from "react-native";
+import { useFetchClave } from '../Hooks/Clave.hook';
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from '@react-navigation/native';
 import { Camera } from 'expo-camera';
@@ -8,27 +9,37 @@ import { Camera } from 'expo-camera';
 const Scanner = () =>{
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [clave, loading] = useFetchClave();
   const navigation = useNavigation();
 
-  useEffect(()=>{
-    (async () => {
-      const clave = await AsyncStorage.getItem("data");
-      // ? If you want to try the Scanner, comment this if
-      if (clave) {
-        navigation.navigate('Home');
-      }
-    })();
+  // ? If you want to try the scanner screen, comment the following useEffect 
+  // ? (and some lines below in the return)
+  useEffect(() => {
+    if (clave) {
+      navigation.navigate('Home');
+    }
+  }, [clave]);
+
+  useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
   }, []);
 
-  const handleBarCodeScanned = async ({ _, data }) => {
-    const msgError = () => Alert.alert("Error", "El código QR no es válido", [{ text: "OK" }]);
+  const handleBarCodeScanned = async ({ data }) => {
+    const msgError = () => Alert.alert(
+      "Error", "El código QR no es válido", 
+      [
+        { 
+          text: "OK",
+          onPress: () => setScanned(false)
+        }
+      ]
+    );
 
     let correctData = true,
-      dataKeys;
+      dataKeys = [];
 
     try {
       dataKeys = Object.keys(JSON.parse(data));
@@ -53,9 +64,6 @@ const Scanner = () =>{
     } else {
       msgError();
       setScanned(true);
-      setTimeout(() => {
-        setScanned(false);
-      }, 3000)
     }
   };
   
@@ -66,7 +74,8 @@ const Scanner = () =>{
     return <Text>No access to camera</Text>
   }
 
-  return(
+  return !clave && !loading ? (
+    // return(
     <View style={styles.container}>
       <View style={styles.cuadrante1}>
         <Image
@@ -88,7 +97,8 @@ const Scanner = () =>{
         <Text style={styles.texto3}>{'Centro de Desarrollo \n Facultad de Informática UAQ \n Todos los derechos reservados 2022 (C)'}</Text>
       </View>
     </View>
-  )
+  // )
+  ) : null;
 }
 
 export default Scanner;
