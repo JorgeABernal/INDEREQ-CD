@@ -1,28 +1,13 @@
-Definamos los roles
-Deportistas - Usuarios
-Computadora del establecimiento - host
+Requeirmientos
 
-REQUERIMIENTOS FÍSICOS
-CÁMARA WEB MODELO:       O SUPERIOR OPCIONALMENTE CON UN TRIPIE
-COMPUTADORA LAPTOP O DE ESCRITORIO CON PROCESADOR MÍNIMO DE PENTIUM (A)
-UN TECLADO QUE PUEDA CONECTARSE CON LA COMPUTADORA
-INTERNET
+Cambiar medidas
 
-PANTALLAS - COMPUTADORA
-(SISTEMA DE QR's)
-1.-CAMARA-> cámara leyendo QR's y un boton para registrarse
-2.-REGISTRO-> Input de su nombre y de una identificación oficial mediante la webcam para generar un QR con el cual los deportistas obtendran su llave de acceso
-	La identificación oficial sirve para que en caso de que el deportista pierda su clave de acceso (por algun error con la aplicacion, borrar la aplicacion, perdida del celular, etc), al llevarle la identificacion al mediador (HOST), éste pueda concretar que si sea la persona.
-(SISTEMA DE API REST)
-Aqui se registran en una base de datos la información de los deportistas (su nombre, su identificacion oficial)
-Aparte se tendra un historial de las horas de ingreso y salida de cada una de las personas que acudan
+Investigar si se pueden abrir simuladores en explorador
 
-PANTALLAS - CELULAR
-1.-CAMARA-> Cámara para leer el QR que genera el sistema de registros
-2.-QR-> QR generado dinámicamente con la información obtenida por el QR del sistema (ID) y la fecha y momento exactos en los que intentas ingresar.
+Cambiar actividades
 
+API
 
+Que ocupamos nosotros
 
-BUSCAR COMO UTILIZAR CÁMARA, LEER CÓDIGOS QR Y GUARDAR EN MEMORIA ESTÁTICA INFORMACIÓN - POR PARTE DE DEPORTISTA
-
-BUSCAR GENERADOR QR CON JS, BUSCAR BD OPTIMA, LECTOR DE QR, PARSEAR STRING A JSON, EXTRAER DE JSON A BD
+Guardar imagenes en BD mysql
