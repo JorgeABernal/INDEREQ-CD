@@ -67,7 +67,7 @@ const Scanner = () =>{
     }
   };
   
-  if (hasPermission === null){
+  if  (hasPermission === null){
     return <Text>Requesting for camera permission</Text>
   }
   if (hasPermission === false){

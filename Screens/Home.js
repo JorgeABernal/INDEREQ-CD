@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, Alert} from 'react-native';
 import { usePreventScreenCapture } from 'expo-screen-capture';
 import { useNavigation } from '@react-navigation/native';
 import { useFetchClave } from '../Hooks/Clave.hook';
@@ -9,18 +9,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TouchableCmp from '../assetsUI/TouchableCmp';
 
 let logoINDEREQ = require('../images/logo.png');
-const actividades = ["Entrada/Salida", "Futbol", "Voleibol", "Atletismo"];
 
 const oInitState = {
   id: '',
   nombreC: '',
-  act: 'Entrada/Salida',
   fecha: '',
 };
 
 const Home = () =>{
   const [globalData, setGlobalData] = useState(oInitState);
-  const [actData, setActAdata] = useState("Entrada/Salida");
   const [clave] = useFetchClave();
   const navigation = useNavigation();
 
@@ -51,14 +48,9 @@ const Home = () =>{
     }
   }, [clave]);
 
-  const handleQR = selectedItem => {
-    if (selectedItem) {
-      setActAdata(selectedItem);
-    }
-
+  const handleQR = () => {
     setGlobalData({
       ...globalData,
-      act: selectedItem ? selectedItem : actData,
       fecha: new Date()
     });
   };
@@ -81,30 +73,7 @@ const Home = () =>{
       <View style={styles.cuadrante2}>
         <Text style={styles.texto1}>Bienvenido nuevamente</Text>
         <Text style={styles.texto2}>{globalData.nombreC}</Text>
-        <Text style={styles.texto4}>¿Qué actividad estás realizando?</Text>
-      </View>
-      <View style={styles.select}>
-        <SelectDropdown 
-            searchPlaceHolder='Selecciona una actividad'
-            data={actividades}
-            onSelect={handleQR}
-            defaultButtonText={actData}
-            buttonTextAfterSelection={(selectedItem) => {
-              return selectedItem;
-            }}
-            rowTextForSelection={(item) => {
-              return item;
-            }}
-            buttonStyle={styles.dropdown1BtnStyle}
-            buttonTextStyle={styles.dropdown1BtnTxtStyle}
-            renderDropdownIcon={isOpened => {
-              return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
-            }}
-            dropdownIconPosition={'right'}
-            dropdownStyle={styles.dropdown1DropdownStyle}
-            rowStyle={styles.dropdown1RowStyle}
-            rowTextStyle={styles.dropdown1RowTxtStyle}
-          />
+        <Text style={styles.texto4}>&#9432; Toca tu QR para actualizarlo &#9432;</Text>
       </View>
       <View style={{overflow: 'hidden', borderRadius: 200, transform: [{scaleX: 1.6}]}}>
         <TouchableCmp onPress={handleQR}>
@@ -136,7 +105,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height*0.20
   },
   cuadrante2:{
-    height: Dimensions.get('window').height*0.20
+    height: Dimensions.get('window').height*0.225
   },
   cuadrante3:{
     justifyContent: 'center',
@@ -156,7 +125,7 @@ const styles = StyleSheet.create({
   },
   texto2:{
     fontSize: Dimensions.get('window').width*0.05,
-    width: Dimensions.get('window').width*0.9,
+    width: Dimensions.get('window').width*1,
     marginTop: Dimensions.get('window').width*0.01,
     marginBottom: Dimensions.get('window').width*0.01,
     textAlign: 'center',
@@ -165,18 +134,23 @@ const styles = StyleSheet.create({
     fontSize:25
   },
   texto3:{
-    fontSize: Dimensions.get('window').width*0.025,
-    textAlign: 'center',
-    color: '#DDD',
-    marginTop: Dimensions.get('window').width*0.02
-  },
-  texto4:{
     fontSize: Dimensions.get('window').width*0.03,
     textAlign: 'center',
-    color: 'white',
-    fontFamily:'Fredoka-Light',
-    marginTop:Dimensions.get('window').height*.02,
-    fontSize:12
+    color: '#DDD',
+    marginTop: Dimensions.get('window').width*0.025
+  },
+  texto4:{
+    // width: Dimensions.get('window').width*0.9,
+    fontFamily: 'Fredoka-Regular',
+    marginTop: Dimensions.get('window').width*0.025,
+    paddingVertical: Dimensions.get('window').width*0.015,
+    fontSize: Dimensions.get('window').width*0.0275,
+    backgroundColor: '#FFF',
+    textAlign: 'center',
+    color: '#000',
+    fontWeight: '700',
+    // borderWidth: Dimensions.get('window').width*0.01,
+    borderColor: '#A00'
   },
   QR:{
     marginTop: Dimensions.get('window').width*-0.875
