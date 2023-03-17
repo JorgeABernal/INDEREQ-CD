@@ -42,14 +42,16 @@ const Scanner = () =>{
       dataKeys = [];
 
     try {
+      console.log(data)
       dataKeys = Object.keys(JSON.parse(data));
+      console.log(datakeys)
     } catch(error) {
       msgError();
     }
 
     if (dataKeys.length === 4) {
       dataKeys.forEach(key => {
-        if (!["idPropio", "nombre", "apellidoP", "apellidoM"].includes(key)) {
+        if (!["idPropio", "nombre"].includes(key)) {
           correctData = false;
         }
       });
