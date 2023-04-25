@@ -28,6 +28,7 @@ const Scanner = () =>{
   }, []);
 
   const handleBarCodeScanned = async ({ data }) => {
+    
     const msgError = () => Alert.alert(
       "Error", "El código QR no es válido", 
       [
@@ -38,20 +39,21 @@ const Scanner = () =>{
       ]
     );
 
-    let correctData = true,
-      dataKeys = [];
+    let correctData = true;
+    let dataKeys = [];
 
     try {
-      console.log(data)
+      console.log('JSON', typeof JSON.parse(data));
       dataKeys = Object.keys(JSON.parse(data));
-      console.log(datakeys)
     } catch(error) {
+      console.log(error);
       msgError();
     }
 
+    console.log('datakeys',dataKeys);
     if (dataKeys.length === 4) {
       dataKeys.forEach(key => {
-        if (!["idPropio", "nombre"].includes(key)) {
+        if (!["nombre", "apellidoP", "apellidoM", "idPropio"].includes(key)) {
           correctData = false;
         }
       });
@@ -65,7 +67,7 @@ const Scanner = () =>{
       navigation.navigate('Home');
     } else {
       msgError();
-      setScanned(true);
+      setScanned(false);
     }
   };
   
