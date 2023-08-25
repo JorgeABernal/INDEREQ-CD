@@ -16,11 +16,11 @@ const Scanner = () =>{
 
   // ? If you want to try the scanner screen, comment the following useEffect 
   // ? (and some lines below in the return)
-  useEffect(() => {
-    if (clave) {
-      navigation.navigate('Home');
-    }
-  }, [clave]);
+  // useEffect(() => {
+  //   if (clave) {
+  //     navigation.navigate('Home');
+  //   }
+  // }, [clave]);
 
   useEffect(() => {
     (async () => {
@@ -79,7 +79,7 @@ const Scanner = () =>{
     return <Text>No access to camera</Text>
   }
 
-  return !clave && !loading ? (
+  return !loading ? (
     // return(
     <View style={styles.container}>
       <View style={styles.cuadrante1}>
