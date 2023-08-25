@@ -80,7 +80,7 @@ const Home = () => {
         <View style={styles.cuadrante3a}>
           <TouchableCmp onPress={handleQR}>
             <View style={styles.cuadrante3b}>
-              <QRCode value={JSON.stringify(globalData)} size={Dimensions.get('window').width * 0.75} logo={logoINDEREQ} />
+              <QRCode value={JSON.stringify(globalData)} size={Dimensions.get('window').width * 0.75} />
             </View>
           </TouchableCmp>
         </View>
