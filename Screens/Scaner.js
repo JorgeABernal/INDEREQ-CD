@@ -45,7 +45,6 @@ const Scanner = () =>{
     let dataKeys = [];
 
     try {
-      console.log('JSON', typeof JSON.parse(data));
       dataKeys = Object.keys(JSON.parse(data));
     } catch(error) {
       console.log(error);

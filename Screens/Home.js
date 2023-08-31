@@ -4,8 +4,6 @@ import { usePreventScreenCapture } from 'expo-screen-capture';
 import { useNavigation } from '@react-navigation/native';
 import { useFetchClave } from '../Hooks/Clave.hook';
 import QRCode from 'react-native-qrcode-svg';
-import SelectDropdown from 'react-native-select-dropdown';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import TouchableCmp from '../assetsUI/TouchableCmp';
 const { width, height, fontScale } = Dimensions.get('window');
 
@@ -21,6 +19,7 @@ const Home = () => {
   const [globalData, setGlobalData] = useState(oInitState);
   const [clave] = useFetchClave();
   const navigation = useNavigation();
+  const [fecha, setFecha] = useState();
 
   usePreventScreenCapture();
 
@@ -59,7 +58,10 @@ const Home = () => {
   //* To visualize
   useEffect(() => {
     if (globalData.fecha !== '') {
-      console.log("->", globalData, "\nFecha", globalData.fecha.toString());
+      // console.log("->", globalData, "\nFecha", globalData.fecha.toString());
+      const minutos = globalData.fecha.getMinutes() <= 9 ? `0${globalData.fecha.getMinutes()}` : globalData.fecha.getMinutes();
+      const segundos = globalData.fecha.getSeconds() <= 9 ? `0${globalData.fecha.getSeconds()}` : globalData.fecha.getSeconds();
+      setFecha(`Fecha: ${globalData.fecha.toLocaleDateString()} \n Hora: ${globalData.fecha.getHours()}:${minutos}:${segundos}`);
     }
   }, [globalData]);
 
@@ -75,6 +77,7 @@ const Home = () => {
         <Text style={styles.texto1}>Bienvenido nuevamente</Text>
         <Text style={styles.texto2}>{globalData.nombreC}</Text>
         <Text style={styles.texto4}>&#9432; Toca tu QR para actualizarlo &#9432;</Text>
+        <Text style={styles.date}>{fecha}</Text>
       </View>
       <View style={styles.cuadrante3}>
         <View style={styles.cuadrante3a}>
@@ -104,7 +107,6 @@ const styles = StyleSheet.create({
     marginTop: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'red',
   },
   logoTexto: {
     width: width,
@@ -114,7 +116,6 @@ const styles = StyleSheet.create({
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'pink',
   },
   texto1: {
     fontSize: 15 / fontScale,
@@ -145,6 +146,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     fontWeight: '700',
+    marginTop: 10,
   },
   cuadrante3: {
     flex: 1,
@@ -170,6 +172,13 @@ const styles = StyleSheet.create({
     height: 100,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'red',
-  }
+  },
+  date: {
+    fontSize: 20 / fontScale,
+    textAlign: 'center',
+    color: '#DDD',
+    fontFamily: 'Fredoka-Light',
+    marginTop: 20,
+    fontWeight: '700',
+  },
 });
